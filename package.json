@@ -4,7 +4,8 @@
   "main": "./server.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon .",
+    "dev:mongo": "nodemon .",
+    "dev:fs": "nodemon .",
     "start": "node ."
   },
   "dependencies": {
