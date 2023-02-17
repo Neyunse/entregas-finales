@@ -1,9 +1,9 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 const app = express();
-const { port } = require("./config/settings")
-const PORT = process.env.PORT || port;
-const { endpoints } = require("./api");
+import settings from "./config/settings.json" assert { type: "json" };
+const PORT = process.env.PORT ||settings.port;
+import { endpoints } from "./api/index.js";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

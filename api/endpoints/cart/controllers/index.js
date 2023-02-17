@@ -1,6 +1,6 @@
-const { Cart } = require('../models/index.js')
-const carts = new Cart('./DB/cart.json');
-const { products } = require('../../products/controllers/index')
+import { Cart } from "../../../../models/dao.js";
+//const d = Dao('./DB/cart.json');
+import { Products } from "../../products/controllers/index.js";
 
 const deleteCart = async (req, res) => {
       const id = await carts.delById(req.params.id);
@@ -52,7 +52,7 @@ const postProductInCart = async (req, res) => {
 }
 
 
-module.exports = {
+export {
       deleteCart,
       deleteProductInCart,
       getProductsInCart,

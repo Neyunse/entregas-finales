@@ -1,12 +1,6 @@
-const { Router } = require("express")
+import { Router } from "express";
 const p = new Router()
-const {
-      getProducts,
-      postProducts,
-      putProducts,
-      deleteProducts,
-
-} = require("./controllers")
+import { getProducts, postProducts, putProducts, deleteProducts } from "./controllers/index.js";
 
 
 p.get("/:id?", getProducts);
@@ -17,4 +11,4 @@ p.put("/:id", putProducts);
 
 p.delete("/:id", deleteProducts);
 
-module.exports = { p }
+export { p }

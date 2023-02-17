@@ -1,7 +1,7 @@
-const { promises: fs } = require("fs")
-const uniqid = require("uniqid")
+import { promises as fs } from "fs";
+import uniqid from "uniqid";
 
-class Cart {
+export default class Products {
       constructor(route) {
             this.route = route
       }
@@ -20,16 +20,15 @@ class Cart {
        * @returns The id of the object that was saved.
        */
       async save(obj) {
-            const cart = await this.getAll()
+            const products = await this.getAll()
             console.log(obj)
             if (!obj) {
                   return null
             } else {
-                  obj.id = uniqid()
-
-
-                  if (cart.length >= 0) {
-                        let writeFile = [...cart, obj]
+                  obj.code = uniqid()
+                  
+                  if (products.length >= 0) {
+                        let writeFile = [...products, obj]
                         let stringify = JSON.stringify(writeFile, null, 2)
                         await fs.writeFile(this.route, stringify, (err) => {
                               if (err) console.error(err);
@@ -57,15 +56,22 @@ class Cart {
        * @returns An array of two objects.
        */
       async update(obj) {
-            const cart = await this.getAll()
-            const item = cart.map(i => i.id).indexOf(obj.id)
+            const products = await this.getAll()
+            const item = products.map(i => i.id).indexOf(obj.id)
             if (item >= 0) {
-                  cart[item] = obj
+                  const old = products[item]
+                  obj.id = products[item].id
+                  products[item] = obj
 
                   try {
-                        await fs.writeFile(this.route, JSON.stringify(cart, null, 2))
-
-                        return obj.id
+                        await fs.writeFile(this.route, JSON.stringify(products, null, 2))
+                        let up = [
+                              {
+                                    old: old,
+                                    new: obj
+                              }
+                        ]
+                        return up
                   } catch (error) {
                         console.error(error)
                         return []
@@ -84,8 +90,8 @@ class Cart {
        */
       async getById(int) {
             try {
-                  const cart = await this.getAll()
-                  let find = cart.find(product => product.id === int)
+                  const products = await this.getAll()
+                  let find = products.find(product => product.id === int)
                   if (!find) {
                         return null
                   }
@@ -97,21 +103,21 @@ class Cart {
             }
       }
 
-
+    
       /**
        * It takes an id, finds the product with that id, and then deletes it from the database
        * @param int - The id of the product you want to delete
        * @returns a boolean value.
        */
       async delById(int) {
-            const cart = await this.getAll()
-            const Single = cart.find(element => element.id == int)
+            const products = await this.getAll()
+            const Single = products.find(element => element.id == int)
 
 
             if (Single) {
 
                   try {
-                        const filter = cart.filter(element => element != Single)
+                        const filter = products.filter(element => element != Single)
                         let stringify = JSON.stringify(filter, null, 2)
                         await fs.writeFile(this.route, stringify, (err) => {
                               if (err) throw new Error(err);
@@ -129,6 +135,4 @@ class Cart {
       }
 }
 
-module.exports = {
-      Cart
-}
+ 

@@ -1,7 +1,7 @@
-const { promises: fs } = require("fs")
-const uniqid = require("uniqid")
+import { promises as fs } from "fs";
+import uniqid from "uniqid";
 
-class Products {
+export default class Products {
       constructor(route) {
             this.route = route
       }
@@ -25,7 +25,7 @@ class Products {
             if (!obj) {
                   return null
             } else {
-                  obj.id = uniqid()
+                  obj.code = uniqid()
                   
                   if (products.length >= 0) {
                         let writeFile = [...products, obj]
@@ -135,6 +135,4 @@ class Products {
       }
 }
 
-module.exports = {
-      Products
-}
+ 

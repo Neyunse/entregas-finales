@@ -1,8 +1,8 @@
-const { Router } = require('express')
+import { Router } from "express";
 const endpoints = new Router()
-const { p, c } = require('./endpoints')
+import { p, c } from "./endpoints/index.js";
 
 endpoints.use("/products", p)
 endpoints.use("/cart", c)
 
-module.exports = { endpoints }
+export {endpoints}

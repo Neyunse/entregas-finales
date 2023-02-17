@@ -1,12 +1,6 @@
-const { Router } = require("express")
+import { Router } from "express";
 const c = new Router()
-const {
-      postCart,
-      deleteCart,
-      getProductsInCart,
-      postProductInCart,
-      deleteProductInCart,
-} = require("./controllers/index")
+import { postCart, deleteCart, getProductsInCart, postProductInCart, deleteProductInCart } from "./controllers/index.js";
 
 
 c.delete("/:id?", deleteCart);
@@ -20,4 +14,4 @@ c.post("/:id/products/:id_prod", postProductInCart);
 c.delete("/:id/products/:id_prod", deleteProductInCart);
 
 
-module.exports = { c }
+export { c }

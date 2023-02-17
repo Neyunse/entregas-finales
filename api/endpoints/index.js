@@ -1,7 +1,7 @@
-const { p } = require("./products")
-const { c } = require("./cart")
+import { p } from "./products/index.js";
+import { c } from "./cart/index.js";
 
-module.exports = {
+export {
       p,
       c
 }

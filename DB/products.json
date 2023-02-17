@@ -8,5 +8,15 @@
     "price": 100,
     "stock": 3,
     "id": "av6gd1slbyjl814"
+  },
+  {
+    "timestamp": 1675544929443,
+    "name": "Manzana",
+    "description": "una manzana",
+    "code": "423",
+    "image": null,
+    "price": 700,
+    "stock": 7,
+    "id": "av6g7vkldqg6tuw"
   }
 ]
