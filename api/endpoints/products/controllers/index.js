@@ -1,7 +1,6 @@
-import { Products } from "../../../../models/dao.js";
-console.log(Products('./DB/products.json'))
-//const Products = dao.Products('./DB/products.json');
+import { Products, DAO_ENV } from "../../../../models/dao.js";
 import settings from "../../../../config/settings.json" assert { type: "json" };
+const products = Products('./DB/products.json')
 
 const deleteProducts = async (req, res) => {
       if (settings.admin) res
@@ -12,7 +11,7 @@ const deleteProducts = async (req, res) => {
                   route: req.originalUrl,
             });
 
-      const id = await Products.delById(req.params.id);
+      const id = await products.delById(req.params.id);
       res.status(200).json({ status: 200, deletedProduct: id });
 }
 
@@ -21,8 +20,8 @@ const getProducts = async (req, res) => {
       res.status(200)
             .json(
                   !req.params.id
-                        ? await Products.getAll()
-                        : await Products.getById(req.params.id)
+                        ? await products.getAll()
+                        : await products.getById(req.params.id)
             );
 }
 
@@ -35,15 +34,27 @@ const postProducts = async (req, res) => {
                   route: req.originalUrl,
             });
       const { name, description, image, price, stock } = req.body;
-      const newProduct = {
-            timestamp: Date.now(),
-            name,
-            description,
-            image,
-            price,
-            stock,
-      };
-      const idNew = await Products.save(newProduct);
+
+      let newProduct
+
+      if (DAO_ENV == 'fs') {
+            newProduct = {
+                  name,
+                  description,
+                  image,
+                  price,
+                  stock,
+            };
+      } else {
+            newProduct = {
+                  name,
+                  description,
+                  image,
+                  price,
+                  stock,
+            };
+      }
+      const idNew = await products.save(newProduct);
       res.status(201).json({ status: 201, newProductId: idNew });
 }
 
@@ -56,18 +67,38 @@ const putProducts = async (req, res) => {
                   route: req.originalUrl,
             });
       const { name, description, image, price, stock } = req.body;
-      const updatedProduct = {
-            timestamp: Date.now(),
-            name,
-            description,
-            image,
-            price,
-            stock,
-      };
-      const id = await Products.update(updatedProduct);
-      res
-            .status(200)
-            .json({ status: 200, updatedProduct: [await Products.getById(id)] });
+      const { id } = req.params;
+      let updatedProduct
+
+      if (DAO_ENV == 'fs') {
+            updatedProduct = {
+                  name,
+                  description,
+                  image,
+                  price,
+                  stock,
+            };
+
+            const id = await products.update(updatedProduct);
+
+            return res
+                  .status(200)
+                  .json({ status: 200, updatedProduct: [await products.getById(id)] });
+      } else {
+            updatedProduct = {
+                  name,
+                  description,
+                  image,
+                  price,
+                  stock,
+            };
+
+            const product = await products.update(id, updatedProduct);
+
+            return res
+                  .status(200)
+                  .json({ status: 200, updatedProduct: product });
+      }
 }
 
 
@@ -76,5 +107,5 @@ export {
       postProducts,
       getProducts,
       putProducts,
-      Products
+      products
 }

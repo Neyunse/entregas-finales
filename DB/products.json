@@ -18,5 +18,14 @@
     "price": 700,
     "stock": 7,
     "id": "av6g7vkldqg6tuw"
+  },
+  {
+    "timestamp": 1676919583528,
+    "name": "Manzana 2",
+    "description": "una manzana muy jugosa",
+    "image": null,
+    "price": 700,
+    "stock": 7,
+    "code": "av6gmmgled6mfqj"
   }
 ]

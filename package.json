@@ -5,10 +5,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev:mongo": "cross-env DAO=mongo nodemon .",
-    "dev:fs": "cross-env DAO=fs nodemon .",
+    "dev:mongo": "cross-env DAO=mongo nodemon --experimental-specifier-resolution=node .",
+    "dev:fs": "cross-env DAO=fs nodemon --experimental-specifier-resolution=node .",
     "database:check": "node ./DB/mongo.js",
-    "start": "node ."
+    "start": "node --experimental-specifier-resolution=node ."
   },
   "dependencies": {
     "cors": "^2.8.5",

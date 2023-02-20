@@ -1,6 +1,6 @@
 import { Cart } from "../../../../models/dao.js";
-//const d = Dao('./DB/cart.json');
-import { Products } from "../../products/controllers/index.js";
+import { products } from "../../products/controllers/index.js";
+const carts = Cart('./DB/cart.json');
 
 const deleteCart = async (req, res) => {
       const id = await carts.delById(req.params.id);

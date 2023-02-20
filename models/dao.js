@@ -12,8 +12,8 @@ switch (DAO_ENV) {
             const {default: MongoProducts} = await import('../models/mongo/products.js')
             const {default: MongoCart} = await import('../models/mongo/cart.js')
             
-            Products = new MongoProducts()
-            Cart = new MongoCart()
+            Products = (mp) => new MongoProducts(mp)
+            Cart = (mc) => new MongoCart(mc)
 
             break;
       
@@ -21,8 +21,8 @@ switch (DAO_ENV) {
             const {default:FsProducts} = await import('../models/fs/products.js')
             const {default: FsCart} = await import('../models/fs/cart.js')
 
-            Products = new FsProducts()
-            Cart = new FsCart()
+            Products = (pf) => new FsProducts(pf)
+            Cart = (cf) => new FsCart(cf)
 
 
             break;
@@ -31,8 +31,8 @@ switch (DAO_ENV) {
             const {default:DefaultProduct} = await import('../models/fs/products.js')
             const {default:DefaultCart} = await import('../models/fs/cart.js')
 
-            Products = new DefaultProduct()
-            Cart = new DefaultCart()
+            Products = (dp) => new DefaultProduct(dp)
+            Cart = (dc) => new DefaultCart(dc)
 
 
             break;
@@ -40,5 +40,6 @@ switch (DAO_ENV) {
 
 export {
       Products,
-      Cart
+      Cart,
+      DAO_ENV
 }
