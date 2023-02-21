@@ -40,7 +40,7 @@ export default class Products {
       async save(obj) {
             const exist = await this.__findOne({ name: obj.name })
             if (exist) return "This product already exists."
-
+            obj.code = uniqid()
             const newObj = await pr.create(obj)
 
             return newObj

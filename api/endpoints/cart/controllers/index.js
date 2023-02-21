@@ -2,53 +2,54 @@ import { Cart } from "../../../../models/dao.js";
 import { products } from "../../products/controllers/index.js";
 const carts = Cart('./DB/cart.json');
 
-const deleteCart = async (req, res) => {
-      const id = await carts.delById(req.params.id);
-      res.status(200).json({ status: 200, deletedCart: id });
+export async function deleteCart(req, res) {
+      const id = await carts.deleteById(req.params.id);
+      res.status(200).json({ status: "ok", deletedCart: id });
 }
 
-const deleteProductInCart = async (req, res) => {
+export async function deleteProductInCart(req, res) {
       const { id, id_prod } = req.params;
-      const cart = await carts.getById(id);
+      const cart = carts.getById(id);
 
       const newCartProducts = cart.products.filter((producto) => {
             return producto.id != id_prod;
       });
 
       cart.products = newCartProducts;
-      const updatedCartId = await carts.update(cart);
+      const updatedCartId = await carts.update(id, cart);
       res
             .status(201)
             .json({
-                  status: 201,
+                  status: "ok",
                   updatedCart: updatedCartId,
                   productDeletedId: id_prod,
             });
 }
 
-const getProductsInCart = async (req, res) => {
-      const cart = await carts.getById(req.params.id);
+export async function getProductsInCart(req, res) {
+      const cart = carts.getById(req.params.id);
       res.status(200).json(cart.products);
 }
 
-const postCart = async (req, res) => {
+export async function postCart(req, res) {
       const newCart = { timestamp: Date.now(), products: [] };
       const idNew = await carts.save(newCart);
-      res.status(201).json({ status: 201, newCartId: idNew });
+      res.status(201).json({ status: "ok", newCartId: idNew });
 }
 
-const postProductInCart = async (req, res) => {
+export async function postProductInCart(req, res) {
       const cartId = req.params.id;
       const productId = req.params.id_prod;
 
-      const cart = await carts.getById(cartId);
-      const product = await products.getById(productId);
+      const cart = carts.getById(cartId);
+      const product = products.getById(productId);
+
       cart.products.push(product);
 
-      const updatedCartId = await carts.update(cart);
+      const updatedCartId = await carts.update(cartId, cart);
       res
             .status(201)
-            .json({ status: 201, updatedCart: updatedCartId, productAdded: product });
+            .json({ status: "ok", updatedCart: updatedCartId, productAdded: product });
 }
 
 
