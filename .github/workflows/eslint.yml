@@ -1,8 +1,7 @@
 name: EsLint
 on:
-  workflow_dispatch:
-  pull_request:
-    branches: [master]
+  push:
+    branches: [dev]
 
 env:
   DATE: $(date +%FT%TZ)

@@ -5,6 +5,8 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport'
 import { PORT, mongoURL, server_secret } from './config/configApp.js'
+import routes from './routes/index.js'
+import { logger } from './config/log.js'
 /*------------------------------------------*/
 const app = express()
 const SERVER_PORT = process.env.PORT || PORT
@@ -21,12 +23,26 @@ app.use(
         secret: server_secret,
         resave: false,
         saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 10,
+        },
     })
 )
 app.use(passport.initialize())
 app.use(passport.session())
+ 
+
+/*------------------------------------------*/
+app.use('api/', routes)
+app.use((req, res) => {
+    res.json({
+        error: {
+            message: `Invalid url: ${req.originalUrl}'`,
+        },
+    })
+})
 /*------------------------------------------*/
 
 app.listen(SERVER_PORT, () =>
-    console.log(`PORT:${SERVER_PORT}`, `PID:${process.pid}`)
+    logger.info(`PORT:${SERVER_PORT}`, `PID:${process.pid}`)
 )
