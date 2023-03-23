@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*", "./config/*"]
-    }
+      "baseUrl": "./src",
+      "paths": {
+          "config/": ["src/config/*"]
+      }
   }
 }
