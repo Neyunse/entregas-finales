@@ -1,0 +1,57 @@
+name: ChangeLog
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    permissions:
+        contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Clone Repo
+          uses: actions/checkout@v3
+          with:
+            repository: ${{ github.event.pull_request.head.repo.full_name }}
+            ref: "master"
+
+        - name: Get Npm version
+          id: package-version
+          uses: martinbeentjes/npm-get-version-action@main
+        - name: Setup node
+          uses: actions/setup-node@v3
+          with:
+            node-version: "${{ env.NODE }}"
+        
+        - name: Setup Node
+          uses: actions/setup-node@v2
+          with:
+            node-version: "${{ env.NODE }}"
+
+        - name: Generate ChangeLog
+          run: |
+            npm install
+            npm ci
+            npm run standar
+            npm run changelog
+        
+        - name: Commit files # transfer the new html files back into the repository
+          run: |
+            git config --local user.name "Neyunse"
+            git add .
+            git commit -m "Changelog generated" -a
+            git tag v${{ steps.package-version.outputs.current-version}}
+        - name: Push changes # push the output folder to your repo
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            force: true
+            branch: ${{ github.ref }}
+
+        - name: Release 📦
+          uses: softprops/action-gh-release@v1
+          with:
+            draft: false
+            generate_release_notes: true
+            tag_name: v${{ steps.package-version.outputs.current-version}}

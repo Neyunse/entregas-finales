@@ -1,0 +1,42 @@
+name: EsLint
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+
+env:
+  DATE: $(date +%FT%TZ)
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+        contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Clone Repo
+          uses: actions/checkout@v3
+          with:
+            repository: ${{ github.event.pull_request.head.repo.full_name }}
+            ref: "master"
+
+        - name: Get Npm version
+          id: package-version
+          uses: martinbeentjes/npm-get-version-action@main
+        - name: Setup node
+          uses: actions/setup-node@v3
+          with:
+            node-version: "${{ env.NODE }}"
+        
+        - name: Setup Node
+          uses: actions/setup-node@v2
+          with:
+            node-version: "${{ env.NODE }}"
+
+        - name: Lint
+          run: |
+            npm install
+            npm ci
+            npm run lint
