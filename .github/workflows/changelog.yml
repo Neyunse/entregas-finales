@@ -38,8 +38,6 @@ jobs:
         
         - name: Commit files # transfer the new html files back into the repository
           run: |
-            git config --global user.email "dev@kagarisoft.com"
-            git config --global user.name "Kagarisoft-dev"
             git add .
             git commit -m "Changelog generated" -a
             git tag v${{ steps.package-version.outputs.current-version}}
