@@ -2,6 +2,8 @@ name: ChangeLog
 on:
   push:
     branches: [master]
+    tags:
+      - "v*.*.*"
 
 jobs:
   changes:
@@ -57,4 +59,3 @@ jobs:
           with:
             draft: false
             generate_release_notes: true
-            tag_name: v${{ steps.package-version.outputs.current-version}}
