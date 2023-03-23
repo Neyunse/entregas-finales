@@ -15,6 +15,9 @@ jobs:
           with:
             repository: ${{ github.event.pull_request.head.repo.full_name }}
             ref: "master"
+         - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+           with:
+            token: '${{ secrets.GITHUB_TOKEN }}'
 
         - name: Get Npm version
           id: package-version
