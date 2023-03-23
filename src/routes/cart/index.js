@@ -10,12 +10,15 @@ import {
 
 const Cart = Router()
 
-Cart.get('/:id?', getCarts)
+Cart.delete('/:id?', deleteCart)
 
-Cart.post('/', postCarts)
+Cart.post('/', postCart)
 
-Cart.put('/:id', putCarts)
+Cart.get('/:id', getProductsInCart)
 
-Cart.delete('/:id', deleteCarts)
+Cart.post('/:id/products/:id_prod', postProductInCart)
+
+Cart.delete('/:id/products/:id_prod', deleteProductInCart)
+
 
 export default Cart
