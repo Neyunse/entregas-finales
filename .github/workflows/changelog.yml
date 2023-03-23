@@ -17,7 +17,7 @@ jobs:
             ref: "master"
          - uses: oleksiyrudenko/gha-git-credentials@v2-latest
            with:
-            token: '${{ secrets.GITHUB_TOKEN }}'
+            github_token: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Get Npm version
           id: package-version
