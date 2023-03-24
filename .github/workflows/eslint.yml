@@ -2,6 +2,7 @@ name: EsLint
 on:
   push:
     branches: [dev]
+  
 
 env:
   DATE: $(date +%FT%TZ)

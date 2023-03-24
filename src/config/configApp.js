@@ -1,5 +1,5 @@
 'use strict'
-import dotenv from 'dotenv'
+import dotenv from 'doten
 /*------------------------------------------*/
 dotenv.config({
     path: 'src/.env',
