@@ -1,8 +1,9 @@
 name: EsLint
 on:
-  workflow_dispatch:
-  pull_request:
-    branches: [master]
+  push:
+    branches: [dev]
+  pull_request: [master]
+  
 
 env:
   DATE: $(date +%FT%TZ)
@@ -10,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  lint:
     permissions:
         contents: write
     runs-on: ubuntu-latest
