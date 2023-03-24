@@ -1,4 +1,4 @@
-import pr from './shemas/products'
+import pr from './schemas/products'
 import uniqid from "uniqid";
 
 export default class Products {

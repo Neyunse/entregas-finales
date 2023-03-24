@@ -10,6 +10,6 @@ const schema = new mongoose.Schema({
     products: Object,
 })
 
-const cr = mongoose.model(table_collection, schema)
+const cr = mongoose.model.cart || mongoose.model(table_collection, schema)
 
 export default cr

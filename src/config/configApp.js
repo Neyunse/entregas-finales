@@ -8,5 +8,6 @@ dotenv.config({
 const mongoURL = process.env.MONGO_URL
 const PORT = 8080
 const server_secret = process.env.SERVER_SECRET
+const admin = true
 /*------------------------------------------*/
-export { mongoURL, PORT, server_secret }
+export { mongoURL, PORT, server_secret, admin }

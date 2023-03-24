@@ -1,4 +1,4 @@
-import cr from './shemas/cart'
+import cr from './schemas/cart'
 export default class Cart {
     constructor(route) {
         this.route = route

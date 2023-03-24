@@ -1,9 +1,10 @@
-import { Products, DAO_ENV } from 'dao'
-const products = Products('./local/products.json')
+import { Products, DAO_ENV } from '../../../dao'
+import { admin } from '../../../config/configApp'
+const products = Products('../../../local/products.json')
 
 const deleteProducts = async (req, res) => {
-    if (settings.admin)
-        res.status(401).json({
+    if (admin)
+        return res.status(401).json({
             error: 401,
             descripcion: 'The route in your petition is not authorized',
             route: req.originalUrl,
@@ -22,8 +23,8 @@ const getProducts = async (req, res) => {
 }
 
 const postProducts = async (req, res) => {
-    if (settings.admin)
-        res.status(401).json({
+    if (admin)
+        return res.status(401).json({
             error: 401,
             descripcion: 'The route in your petition is not authorized',
             route: req.originalUrl,
@@ -54,8 +55,8 @@ const postProducts = async (req, res) => {
 }
 
 const putProducts = async (req, res) => {
-    if (settings.admin)
-        res.status(401).json({
+    if (admin)
+        return res.status(401).json({
             error: 401,
             descripcion: 'The route in your petition is not authorized',
             route: req.originalUrl,

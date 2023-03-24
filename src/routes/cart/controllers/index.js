@@ -1,6 +1,6 @@
-import { Cart } from 'dao'
+import { Cart } from '../../../dao'
 import { products } from '../../products/controllers'
-const carts = Cart('./DB/cart.json')
+const carts = Cart('../../../local/cart.json')
 
 export async function deleteCart(req, res) {
     const id = await carts.deleteById(req.params.id)

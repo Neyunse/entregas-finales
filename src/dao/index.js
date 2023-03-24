@@ -1,6 +1,6 @@
-import db from 'config/mongo.js'
+import db from '../config/mongo.js'
 
-const DAO_ENV = "mongo"
+const DAO_ENV = 'mongo'
 
 let Products
 let Cart

@@ -4,7 +4,7 @@ import { logger } from './log'
 const db = async () => {
     return await mongoose
         .connect(mongoURL)
-        .then(() => logger.info('Connected!'))
+        .then(() => logger.info('MONGO Connected!'))
         .catch((err) => logger.error(err))
 }
 

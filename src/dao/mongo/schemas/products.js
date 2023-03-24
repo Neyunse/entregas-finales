@@ -19,6 +19,6 @@ const schema = new mongoose.Schema({
 })
 
 
-const pr = mongoose.model(table_collection, schema);
+const pr = mongoose.model.products || mongoose.model(table_collection, schema)
 
 export default pr

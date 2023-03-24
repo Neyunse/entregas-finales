@@ -33,7 +33,7 @@ app.use(passport.session())
  
 
 /*------------------------------------------*/
-app.use('api/', routes)
+app.use(routes)
 app.use((req, res) => {
     res.json({
         error: {
