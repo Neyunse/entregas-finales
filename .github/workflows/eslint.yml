@@ -2,6 +2,7 @@ name: EsLint
 on:
   push:
     branches: [dev]
+  pull_request: [master]
   
 
 env:
@@ -10,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  lint:
     permissions:
         contents: write
     runs-on: ubuntu-latest
