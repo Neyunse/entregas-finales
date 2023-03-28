@@ -7,12 +7,6 @@ const auth = Router()
 
 auth.post('/register', uploader.single('avatar'), register)
 
-auth.post(
-    '/login',
-    passport.authenticate('login', {
-        failureMessage: true,
-    }),
-    login
-)
+auth.post('/login', login)
 
 export default auth

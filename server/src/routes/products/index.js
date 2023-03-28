@@ -7,14 +7,16 @@ import {
     deleteProducts,
 } from './controllers'
 
+import { jwtGet } from './services/jwt'
+
 const Product = Router()
 
 Product.get('/:id?', getProducts)
 
-Product.post('/', postProducts)
+Product.post('/', jwtGet, postProducts)
 
-Product.put('/:id', putProducts)
+Product.put('/:id', jwtGet, putProducts)
 
-Product.delete('/:id', deleteProducts)
+Product.delete('/:id', jwtGet, deleteProducts)
 
 export default Product

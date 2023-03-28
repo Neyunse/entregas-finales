@@ -8,6 +8,11 @@ const schema = new mongoose.Schema({
         default: Date.now,
     },
     products: Object,
+    uid: {
+        type: String,
+        unique: true,
+        required: true,
+    },
 })
 
 const cr = mongoose.model.cart || mongoose.model(table_collection, schema)

@@ -26,7 +26,7 @@ export default class Cart {
     }
 
     async getById(int) {
-        return await cr.find({ _id: int })
+        return await cr.findOne({ _id: int })
     }
 
     async delById(int) {

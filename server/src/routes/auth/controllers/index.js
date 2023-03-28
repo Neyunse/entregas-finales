@@ -1,8 +1,9 @@
-import UserModel from 'dao/mongo/schemas/user'
-import { createHash } from '../services'
+import UserModel from '../../../dao/mongo/schemas/user'
+import { createHash, validatePassword } from '../services'
 import jwt from 'jsonwebtoken'
-import { server_secret } from 'config/configApp'
-
+import { server_secret } from '../../../config/configApp'
+import transporter, { email_app } from '../../../config/mail'
+import { logger } from '../../../config/log'
 const proccess_type = process.env.NODE_TYPE
 
 const register = async (req, res) => {
@@ -32,6 +33,14 @@ const register = async (req, res) => {
                 : null,
         })
 
+        await transporter.sendMail({
+            from: `E-commerce App <${email_app}>`,
+            to: email_app,
+            subject: 'New user created',
+            html: `${email} was successfully registered`,
+        })
+
+        logger.info('User created, and email sended')
         return res.send({
             user: create,
         })
@@ -43,29 +52,41 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    if (!req.session.messages) {
-        const findUser = req.user
+    const { email, password } = req.body
+    try {
+        if (!email || !password) return new Error('Empty fields')
 
-        req.session.user = {
+        const findUser = await UserModel.findOne({ email })
+
+        if (!findUser) return new Error('This user does not exist')
+
+        const isValidPassword = await validatePassword(
+            password,
+            findUser.password
+        )
+
+        if (!isValidPassword) return new Error('invalid password')
+
+        const tokenizeUser = {
             id: findUser._id,
-            username: findUser.username,
-            email: findUser.email,
             auth_type: findUser.role,
         }
 
-        const token = jwt.sign(req.session.use, server_secret, {
+        const token = jwt.sign(tokenizeUser, server_secret, {
             expiresIn: '1d',
         })
 
         return res.send({
             access_token: token,
             user: {
-                ...req.session.user,
+                ...tokenizeUser,
             },
         })
+    } catch (error) {
+        return res.status(401).send({
+            message: error.message,
+        })
     }
-
-    return res.status(400).send({ message: req.session.messages })
 }
 
 export { login, register }

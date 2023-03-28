@@ -3,12 +3,13 @@ import { admin } from '../../../config/configApp'
 const products = Products('../../../local/products.json')
 
 const deleteProducts = async (req, res) => {
-    if (admin)
+    if (req.tokenizedUser.auth_type !== 'admin') {
         return res.status(401).json({
             error: 401,
-            descripcion: 'The route in your petition is not authorized',
+            descripcion: 'You do not have sufficient permissions',
             route: req.originalUrl,
         })
+    }
 
     const id = await products.delById(req.params.id)
     res.status(200).json({ status: 200, deletedProduct: id })
@@ -23,15 +24,17 @@ const getProducts = async (req, res) => {
 }
 
 const postProducts = async (req, res) => {
-    if (admin)
-        return res.status(401).json({
-            error: 401,
-            descripcion: 'The route in your petition is not authorized',
-            route: req.originalUrl,
-        })
     const { name, description, image, price, stock } = req.body
 
-    let newProduct
+    let newProductId
+
+    if (req.tokenizedUser.auth_type !== 'admin') {
+        return res.status(401).json({
+            error: 401,
+            descripcion: 'You do not have sufficient permissions',
+            route: req.originalUrl,
+        })
+    }
 
     if (DAO_ENV == 'fs') {
         newProduct = {
@@ -51,16 +54,20 @@ const postProducts = async (req, res) => {
         }
     }
     const idNew = await products.save(newProduct)
-    res.status(201).json({ status: 201, newProductId: idNew })
+    res.status(201).json({
+        status: 201,
+        newProductId: idNew,
+    })
 }
 
 const putProducts = async (req, res) => {
-    if (admin)
+    if (req.tokenizedUser.auth_type !== 'admin') {
         return res.status(401).json({
             error: 401,
-            descripcion: 'The route in your petition is not authorized',
+            descripcion: 'You do not have sufficient permissions',
             route: req.originalUrl,
         })
+    }
     const { name, description, image, price, stock } = req.body
     const { id } = req.params
     let updatedProduct
