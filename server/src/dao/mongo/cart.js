@@ -25,6 +25,15 @@ export default class Cart {
         return await cr.findByIdAndUpdate({ _id: obj.id }, obj)
     }
 
+    async updateProducts(id, product_arr) {
+        return await cr.findByIdAndUpdate(
+            { _id: id },
+            {
+                products: product_arr,
+            }
+        )
+    }
+
     async getById(int) {
         return await cr.findOne({ _id: int })
     }

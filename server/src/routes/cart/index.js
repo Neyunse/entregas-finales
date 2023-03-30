@@ -8,13 +8,15 @@ import {
     makeCartAndPostProduct,
 } from './controllers'
 
+import { jwtGet } from '../products/services/jwt'
+
 const Cart = Router()
 
 Cart.delete('/del/:id?', deleteCart)
 
 // Cart.post('/new', postCart)
 
-Cart.post('/new/:uid/:id_prod', makeCartAndPostProduct)
+Cart.post('/new/:id_prod', jwtGet, makeCartAndPostProduct)
 
 Cart.get('/:id', getProductsInCart)
 

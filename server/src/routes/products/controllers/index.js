@@ -1,5 +1,4 @@
 import { Products, DAO_ENV } from '../../../dao'
-import { admin } from '../../../config/configApp'
 const products = Products('../../../local/products.json')
 
 const deleteProducts = async (req, res) => {
@@ -26,7 +25,11 @@ const getProducts = async (req, res) => {
 const postProducts = async (req, res) => {
     const { name, description, image, price, stock } = req.body
 
-    let newProductId
+    if (!name || !description || !image || !price || !stock) {
+        return res
+            .status(400)
+            .send({ error: { message: 'some fields are required' } })
+    }
 
     if (req.tokenizedUser.auth_type !== 'admin') {
         return res.status(401).json({
@@ -36,22 +39,12 @@ const postProducts = async (req, res) => {
         })
     }
 
-    if (DAO_ENV == 'fs') {
-        newProduct = {
-            name,
-            description,
-            image,
-            price,
-            stock,
-        }
-    } else {
-        newProduct = {
-            name,
-            description,
-            image,
-            price,
-            stock,
-        }
+    const newProduct = {
+        name,
+        description,
+        image,
+        price,
+        stock,
     }
     const idNew = await products.save(newProduct)
     res.status(201).json({
@@ -61,6 +54,7 @@ const postProducts = async (req, res) => {
 }
 
 const putProducts = async (req, res) => {
+    const { name, description, image, price, stock } = req.body
     if (req.tokenizedUser.auth_type !== 'admin') {
         return res.status(401).json({
             error: 401,
@@ -68,8 +62,20 @@ const putProducts = async (req, res) => {
             route: req.originalUrl,
         })
     }
-    const { name, description, image, price, stock } = req.body
+
     const { id } = req.params
+
+    if (!name || !description || !image || !price || !stock) {
+        return res
+            .status(400)
+            .send({ error: { message: 'some fields are required' } })
+    }
+    if (!id) {
+        return res
+            .status(400)
+            .send({ error: { message: 'Id parameter is missing' } })
+    }
+
     let updatedProduct
 
     if (DAO_ENV == 'fs') {

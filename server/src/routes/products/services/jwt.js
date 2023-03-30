@@ -1,35 +1,34 @@
+import { logger } from '../../../config/log'
 import jsw from 'jsonwebtoken'
 import { server_secret } from '../../../config/configApp'
 
-const jwtGet = (req, res, next) => {
-
-
+const jwtGet = async (req, res, next) => {
     const bearerHeader = req.headers['authorization']
 
-    if (typeof bearerHeader !== 'undefined') {
-        try {
-         
-            const bearer = bearerHeader.split(' ')
-      
-            const bearerToken = bearer[1]
-            const user = jsw.verify(bearerToken, server_secret)
+    try {
+        if (typeof bearerHeader === 'undefined') {
+            return res
+                .status(400)
+                .send({ error: { message: 'Bearer token was undefined' } })
+        }
 
-            if (user) {
-               
-                req.token = bearerToken
-                req.tokenizedUser = user
+        const bearer = bearerHeader.split(' ')
 
-                next()
+        const bearerToken = bearer[1]
+
+        await jsw.verify(bearerToken, server_secret, (err, decoded) => {
+            if (err) {
+                logger.error(err)
+                return res.status(401).send({ error: { message: err.message } })
             }
 
-            return new Error('Invalid bearer token')
-        } catch (error) {
-            return res.status(401).send({
-                message: error.message,
-            })
-        }
-    } else {
-        return res.status(500).send("Fobidden")
+            req.token = bearerToken
+            req.tokenizedUser = decoded
+
+            next()
+        })
+    } catch (error) {
+        return res.status(500).send(error.message)
     }
 }
 

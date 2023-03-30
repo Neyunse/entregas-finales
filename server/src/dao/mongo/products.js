@@ -46,7 +46,7 @@ export default class Products {
     }
 
     async update(id, obj) {
-        const find = await this.findByIdAndUpdate(id, obj)
+        const find = await this.findByIdAndUpdate({ _id: id }, obj)
 
         return find
     }

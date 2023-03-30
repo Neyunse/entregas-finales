@@ -35,9 +35,7 @@ export async function getProductsInCart(req, res) {
     const cart = await carts.getById(id)
 
     if (cart) {
-        return res.send({
-            products: cart.products,
-        })
+        return res.send({ cart })
     }
 
     return res.status(404).send({
@@ -53,25 +51,40 @@ export async function getProductsInCart(req, res) {
 // }
 
 export const makeCartAndPostProduct = async (req, res) => {
-    const { id_prod, uid } = req.params
-    const product = await products.getById(id_prod)
-    const newCart = { timestamp: Date.now(), products: [product], uid }
-    const cartResult = await carts.save(newCart)
-    res.status(201).json({ status: 'ok', cartId: cartResult._id })
+    const { id_prod } = req.params
+
+    try {
+        const product = await products.getById(id_prod)
+        const newCart = {
+            timestamp: Date.now(),
+            products: [product],
+            uid: req.tokenizedUser.id,
+        }
+        const cartResult = await carts.save(newCart)
+        res.status(201).json({ status: 'ok', cartId: cartResult._id })
+    } catch (error) {
+        return res.status(400).json({ error: { message: error.message } })
+    }
 }
 
 export async function postProductInCart(req, res) {
-    const { id_prod, cartId } = req.params
+    const { id_prod, id } = req.params
 
-    const cart = await carts.getById(cartId)
+    const cart = await carts.getById(id)
     const product = await products.getById(id_prod)
 
-    cart.products.push(product)
+    if (cart) {
+        const product_arr = [...cart.products, product]
 
-    const updatedCartId = await carts.update(cartId, cart)
-    res.status(201).json({
-        status: 'ok',
-        updatedCart: updatedCartId,
-        productAdded: product,
-    })
+        const updatedCartId = await carts.updateProducts(id, product_arr)
+        return res.send({
+            status: 'ok',
+            updatedCart: updatedCartId,
+            productAdded: product,
+        })
+    }
+
+    return res
+        .status(404)
+        .json({ error: { message: 'Your cart was not found' } })
 }

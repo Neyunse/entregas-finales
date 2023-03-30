@@ -25,14 +25,7 @@ switch (DAO_ENV) {
         Cart = (cf) => new FsCart(cf)
 
         break
-    default:
-        const { default: DefaultProduct } = await import('./fs/products.js')
-        const { default: DefaultCart } = await import('./fs/cart.js')
-
-        Products = (dp) => new DefaultProduct(dp)
-        Cart = (dc) => new DefaultCart(dc)
-
-        break
+ 
 }
 
 export { Products, Cart, DAO_ENV }

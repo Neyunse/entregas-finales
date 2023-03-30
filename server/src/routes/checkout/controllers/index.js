@@ -13,7 +13,7 @@ const processPayment = async (req, res) => {
         if (user) {
             const buyedProducts = cart.products
                 .map((p) => {
-                    return `${p.name} - ${p.price}`
+                    return `${p.name} - ${p.price} usd`
                 })
                 .join('<br>')
 
