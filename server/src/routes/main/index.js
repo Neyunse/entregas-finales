@@ -1,7 +1,9 @@
 import { Router } from 'express'
-import index from './controllers'
+import index,{info} from './controllers'
 const Main = Router()
 
 Main.get('/', index)
+Main.get('/info', info)
+
 
 export default Main
