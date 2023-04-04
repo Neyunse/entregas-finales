@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useState, useEffect } from "react"
-const nav = () => {
+const Nav = () => {
       const [user, setUser] = useState()
       const getMe = async () => {
             await axios("http://localhost:8080/api/auth/user/me", {
@@ -59,4 +59,4 @@ const nav = () => {
       )
 }
 
-export default nav
+export default Nav
