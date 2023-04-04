@@ -13,7 +13,11 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    avatar: String,
+    avatar: {
+        type: String,
+        default:
+            'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541',
+    },
     phoneNumber: String,
     age: Number,
     name: String,

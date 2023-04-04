@@ -1,0 +1,62 @@
+import axios from "axios"
+import { useState, useEffect } from "react"
+const nav = () => {
+      const [user, setUser] = useState()
+      const getMe = async () => {
+            await axios("http://localhost:8080/api/auth/user/me", {
+                  headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": " Bearer " + JSON.parse(localStorage.getItem("user")).access_token
+                  }
+            }).then((r) => r.data).then((data) => {
+                  setUser(data);
+            })
+      }
+
+      useEffect(() => {
+            getMe()
+      }, [])
+
+      const clearUser = () => {
+            localStorage.removeItem("user")
+            window.location.reload()
+      }
+
+
+      return (
+            <>
+                  <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+                        <div className="container-fluid">
+                              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                                    <span className="navbar-toggler-icon"></span>
+                              </button>
+                              <a className="navbar-brand" href="#">Navbar</a>
+                              <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
+                                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                          <li className="nav-item">
+                                                <a className="nav-link" aria-current="page" href="/">Home</a>
+                                          </li>
+                                          <li className="nav-item">
+                                                <a className="nav-link" href="/cart">My Cart</a>
+                                          </li>
+                                    </ul>
+                                    <ul className="navbar-nav  mb-2 mb-lg-0">
+                                          <li className="nav-item">
+                                                <a className="nav-link" aria-current="page" href="#">
+                                                      {user && user.avatar ? <img src={user && user.avatar} alt={user && user.username} /> : user && user.username}
+                                                </a>
+                                          </li>
+                                          <li className="nav-item">
+                                                <button onClick={clearUser} className="nav-link kg__button" aria-current="page" href="#">
+                                                      Logout
+                                                </button>
+                                          </li>
+                                    </ul>
+                              </div>
+                        </div>
+                  </nav>
+            </>
+      )
+}
+
+export default nav

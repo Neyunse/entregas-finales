@@ -15,6 +15,7 @@ const SERVER_PORT = process.env.PORT || PORT
 app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static('upload'))
 app.use(
     session({
         store: MongoStore.create({

@@ -27,3 +27,4 @@
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"expiredAt":"2023-03-29T16:42:24.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError"}
 {"expiredAt":"2023-03-29T16:42:24.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError"}
+{"level":"error","message":"jwt malformed","name":"JsonWebTokenError"}

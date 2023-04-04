@@ -1,7 +1,7 @@
 import UserModel from '../../../dao/mongo/schemas/user'
 import { createHash, validatePassword } from '../services'
 import jwt from 'jsonwebtoken'
-import { server_secret } from '../../../config/configApp'
+import { server_secret, PORT } from '../../../config/configApp'
 import transporter, { email_app } from '../../../config/mail'
 import { logger } from '../../../config/log'
 const proccess_type = process.env.NODE_TYPE
@@ -28,8 +28,8 @@ const register = async (req, res) => {
             password: Hash,
             avatar: file
                 ? proccess_type == 'DEV'
-                    ? `${req.protocol}://${req.hostname}:${process.env.PORT}/upload/${file.filename}`
-                    : `${req.protocol}://${req.hostname}/upload/${file.filename}`
+                    ? `${req.protocol}://${req.hostname}:${PORT}/upload/avatar/${file.filename}`
+                    : `${req.protocol}://${req.hostname}/upload/avatar/${file.filename}`
                 : null,
         })
 
@@ -89,4 +89,19 @@ const login = async (req, res) => {
     }
 }
 
-export { login, register }
+const me = async (req, res) => {
+    const findUser = await UserModel.findOne({ _id: req.tokenizedUser.id })
+    if (!findUser)
+        return res.status(404).send({
+            message: 'This user not exists.',
+        })
+
+    return res.send({
+        username: findUser.username,
+        email: findUser.email,
+        role: findUser.role,
+        avatar: findUser.avatar,
+    })
+}
+
+export { login, register, me }

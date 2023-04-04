@@ -35,7 +35,7 @@ export default function ProductList() {
       url: `http://localhost:8080/api/cart/new/${id}`,
       headers: {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer '
+        "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
       }
     };
     await axios(options).then((r) => r.data).then((data) => {
@@ -57,7 +57,7 @@ export default function ProductList() {
       url: `http://localhost:8080/api/cart/add/${cartId}/products/${id}`,
       headers: {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer '
+        "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
       }
     };
 
@@ -77,7 +77,7 @@ export default function ProductList() {
       url: `http://localhost:8080/api/checkout/${cartId}`,
       headers: {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer '
+        "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
       }
     };
 
