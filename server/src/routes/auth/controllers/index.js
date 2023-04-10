@@ -83,25 +83,31 @@ const login = async (req, res) => {
             },
         })
     } catch (error) {
-        return res.status(401).send({
+        return res.status(500).send({
             message: error.message,
         })
     }
 }
 
 const me = async (req, res) => {
-    const findUser = await UserModel.findOne({ _id: req.tokenizedUser.id })
-    if (!findUser)
-        return res.status(404).send({
-            message: 'This user not exists.',
-        })
+    try {
+        const findUser = await UserModel.findOne({ _id: req.tokenizedUser.id })
+        if (!findUser)
+            return res.status(404).send({
+                message: 'This user not exists.',
+            })
 
-    return res.send({
-        username: findUser.username,
-        email: findUser.email,
-        role: findUser.role,
-        avatar: findUser.avatar,
-    })
+        return res.send({
+            username: findUser.username,
+            email: findUser.email,
+            role: findUser.role,
+            avatar: findUser.avatar,
+        })
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message,
+        })
+    }
 }
 
 export { login, register, me }

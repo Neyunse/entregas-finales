@@ -6,45 +6,53 @@ const carts = Cart('../../../local/cart.json')
 
 const processPayment = async (req, res) => {
     const { cid } = req.params
-    const cart = await carts.getById(cid)
-    if (cart && cart.uid === req.tokenizedUser.id) {
-        const user = await UserModel.findOne({ _id: req.tokenizedUser.id })
+    try {
+        const cart = await carts.getById(cid)
+        if (cart && cart.uid === req.tokenizedUser.id) {
+            const user = await UserModel.findOne({ _id: req.tokenizedUser.id })
 
-        if (user) {
-            const buyedProducts = cart.products
-                .map((p) => {
-                    return `${p.name} - ${p.price} usd`
-                })
-                .join('<br>')
+            if (user) {
+                const buyedProducts = cart.products
+                    .map((p) => {
+                        return `${p.name} - ${p.price} usd`
+                    })
+                    .join('<br>')
 
-            const html_pro = `<h1>Nuevo Pedido</h1>
+                const html_pro = `<h1>Nuevo Pedido</h1>
             ${buyedProducts}`
 
-            await transporter.sendMail({
-                from: `E-commerce App <${email_app}>`,
-                to: user.email,
-                subject: 'Your order has been received and is being processed.',
-                html: html_pro,
-            })
+                await transporter.sendMail({
+                    from: `E-commerce App <${email_app}>`,
+                    to: user.email,
+                    subject:
+                        'Your order has been received and is being processed.',
+                    html: html_pro,
+                })
 
-            await carts.delById(cid)
+                await carts.delById(cid)
 
-            return res.send({
-                status: 'success',
-                message: 'Your payment has been successfully!',
+                return res.send({
+                    status: 'success',
+                    message: 'Your payment has been successfully!',
+                })
+            }
+
+            return res.status(404).send({
+                status: 'error',
+                message: 'User not found',
             })
         }
 
         return res.status(404).send({
             status: 'error',
-            message: 'User not found',
+            message: "You don't have any products to purchase.",
+        })
+    } catch (error) {
+        return res.status(500).send({
+            status: 'error',
+            message: error.message,
         })
     }
-
-    return res.status(404).send({
-        status: 'error',
-        message: "You don't have any products to purchase.",
-    })
 }
 
 export { processPayment }

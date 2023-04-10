@@ -1,34 +1,25 @@
 import { useState, useEffect } from "react"
 
-export default function Product({ item, callbackButton, cartId, AddCallback }) {
+export default function Product({ item, callbackButton, cartId, AddCallback, isOnCart, removeCallback }) {
 
-  const [idExist, setIdExist] = useState(false)
+  const [isTaked, setIsTaked] = useState(false)
+
+  const localArr = []
+
   const MakeCart = () => {
     const buttonCallback = {
       id: item._id,
     }
 
     callbackButton(buttonCallback)
+    setIsTaked(true)
+
+    localArr.push(item._id)
+
+    localStorage.setItem("productsIDInCart", JSON.stringify(localArr))
 
   }
 
-  useEffect(() => {
-    if (cartId) {
-      setIdExist(true)
-
-    } else {
-      setIdExist(false)
-
-    }
-  }, [cartId])
-
-  const AddProduct = () => {
-    const buttonCallback = {
-      id: item._id,
-    }
-
-    AddCallback(buttonCallback)
-  }
   return (
     <div className="card" style={{
       width: '18rem',
@@ -37,16 +28,19 @@ export default function Product({ item, callbackButton, cartId, AddCallback }) {
       <div className="card-body">
         <h5 className="card-title">{item.name}</h5>
         <p className="card-text">{item.description}</p>
-        {item.stock >= 1 ? (
+
+        {!isOnCart ? (
           <>
-            {idExist ? <div data-cartId={cartId} onClick={AddProduct} role="button" className="kg__button w-100 kg-no__decoration">Add for {item.price} USD</div> : <div onClick={MakeCart} role="button" className="kg__button w-100 kg-no__decoration">Buy for {item.price} USD</div>
-
-            }
-
+            {isTaked ? <button data-cartId={cartId} role="button" className="kg__button w-100 kg-no__decoration" disabled>Already in the cart</button> : <div onClick={MakeCart} role="button" className="kg__button w-100 kg-no__decoration">Buy for {item.price} USD</div>}
           </>
         ) : (
-          <div className="kg__button w-100 kg-no__decoration" disabled>Buy for {item.price} USD</div>
+            <>
+              <>
+                <div onClick={() => removeCallback(item._id)} role="button" className="kg__button w-100 kg-no__decoration">Remove</div>
+              </>
+            </>
         )}
+
       </div>
     </div>
   );

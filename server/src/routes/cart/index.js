@@ -14,15 +14,13 @@ const Cart = Router()
 
 Cart.delete('/del/:id?', deleteCart)
 
-// Cart.post('/new', postCart)
-
 Cart.post('/new/:id_prod', jwtGet, makeCartAndPostProduct)
 
-Cart.get('/:id', getProductsInCart)
+Cart.get('/my/:id', getProductsInCart)
 
 Cart.post('/add/:id/products/:id_prod', postProductInCart)
 
-Cart.delete('/del/:id/products/:id_prod', deleteProductInCart)
+Cart.delete('/del/:id/products/:id_prod', jwtGet, deleteProductInCart)
 
 
 

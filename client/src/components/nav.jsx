@@ -10,6 +10,8 @@ const Nav = () => {
                   }
             }).then((r) => r.data).then((data) => {
                   setUser(data);
+            }).catch(err => {
+                  //clearUser()
             })
       }
 
@@ -19,6 +21,7 @@ const Nav = () => {
 
       const clearUser = () => {
             localStorage.removeItem("user")
+            setUser()
             window.location.reload()
       }
 

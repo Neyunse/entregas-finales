@@ -1,4 +1,5 @@
 import cr from './schemas/cart'
+import duplicatedError from 'mongoose-duplicate-key-error'
 export default class Cart {
     constructor(route) {
         this.route = route
@@ -17,7 +18,7 @@ export default class Cart {
 
             return create
         } catch (error) {
-            console.log(error)
+            return error.message
         }
     }
 

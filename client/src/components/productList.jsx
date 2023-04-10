@@ -21,8 +21,8 @@ export default function ProductList() {
   };
   useEffect(() => {
     getProducts();
-
-    if (localStorage.getItem("cartId") !== undefined) {
+    
+    if (localStorage.getItem("cartId") != undefined) {
       setSetCardiD(localStorage.getItem("cartId"))
     }
   }, []);
