@@ -4,20 +4,13 @@ export default function Product({ item, callbackButton, cartId, AddCallback, isO
 
   const [isTaked, setIsTaked] = useState(false)
 
-  const localArr = []
-
   const MakeCart = () => {
     const buttonCallback = {
       id: item._id,
     }
 
     callbackButton(buttonCallback)
-    setIsTaked(true)
-
-    localArr.push(item._id)
-
-    localStorage.setItem("productsIDInCart", JSON.stringify(localArr))
-
+    setIsTaked(true )
   }
 
   return (
