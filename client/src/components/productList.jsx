@@ -7,7 +7,7 @@ export default function ProductList() {
 
   const getProducts = async () => {
     await axios
-      .get("http://localhost:8080/api/products")
+      .get("https://crimson-water-4670.fly.dev/api/products")
       .then((r) => {
         if (!r.data) {
           console.error(r);
@@ -54,7 +54,7 @@ export default function ProductList() {
 
     const options = {
       method: "POST",
-      url: `http://localhost:8080/api/checkout/${cartId}`,
+      url: `https://crimson-water-4670.fly.dev/api/checkout/${cartId}`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
