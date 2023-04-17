@@ -8,8 +8,8 @@ dotenv.config({
 /*------------------------------------------*/
 const email_app = process.env.EMAIL_USER
 const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
- 
+    service: 'gmail',
+
     auth: {
         user: email_app,
         pass: process.env.EMAIL_PASSWORD,

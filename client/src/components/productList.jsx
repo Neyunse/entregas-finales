@@ -32,15 +32,15 @@ export default function ProductList() {
 
     const options = {
       method: "POST",
-      url: `http://localhost:8080/api/cart/new/${id}`,
+      url: `http://localhost:8080/api/cart/add/products/${id}`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
       }
     };
     await axios(options).then((r) => r.data).then((data) => {
-      setSetCardiD(data.cartId)
-      localStorage.setItem('cartId', data.cartId)
+      console.log("added product");
+      
     }).catch((err) => {
       if (err) {
         console.error(`[ERROR] ${err.message}: ` + err.response.data.error.message)
@@ -49,26 +49,6 @@ export default function ProductList() {
 
   }
 
-  const AddCallback = async (callback) => {
-    const { id } = callback;
-
-    const options = {
-      method: "POST",
-      url: `http://localhost:8080/api/cart/add/${cartId}/products/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
-      }
-    };
-
-    await axios(options).then((r) => r.data).then((data) => {
-
-    }).catch((err) => {
-      if (err) {
-        console.error(`[ERROR] ${err.message}: ` + err.response.data.error.message)
-      }
-    })
-  }
 
   const checkout = async () => {
 
@@ -94,9 +74,8 @@ export default function ProductList() {
   return (
     <>
       <ul className="kg__flex gap-20 productList">
-        {products.map((p, i) => <Product key={i} item={p} AddCallback={AddCallback} cartId={cartId} callbackButton={ProductCallback} />)}
+        {products.map((p, i) => <Product key={i} item={p} cartId={cartId} callbackButton={ProductCallback} />)}
       </ul>
-      <div role="button" onClick={checkout} className="kg__button w-100 kg-no__decoration">Procesar compra</div>
     </>
   );
 }

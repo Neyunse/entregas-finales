@@ -3,11 +3,9 @@ import express from 'express'
 import cors from 'cors'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
-import passport from 'passport'
 import { PORT, mongoURL, server_secret } from './config/configApp.js'
 import routes from './routes/index.js'
 import { logger } from './config/log.js'
-import initializePassport from './config/passport.set.js'
 /*------------------------------------------*/
 const app = express()
 const SERVER_PORT = process.env.PORT || PORT
@@ -30,10 +28,7 @@ app.use(
         },
     })
 )
-app.use(passport.initialize())
-app.use(passport.session())
 
-initializePassport()
 
 /*------------------------------------------*/
 app.use(routes)

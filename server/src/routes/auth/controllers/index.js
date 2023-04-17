@@ -1,9 +1,10 @@
-import UserModel from '../../../dao/mongo/schemas/user'
+import UserModel from '../../../dao/schemas/user'
 import { createHash, validatePassword } from '../services'
 import jwt from 'jsonwebtoken'
 import { server_secret, PORT } from '../../../config/configApp'
 import transporter, { email_app } from '../../../config/mail'
 import { logger } from '../../../config/log'
+import CartModel from '../../../dao/schemas/cart'
 const proccess_type = process.env.NODE_TYPE
 
 const register = async (req, res) => {
@@ -22,10 +23,13 @@ const register = async (req, res) => {
 
         const Hash = await createHash(password)
 
+        const cart = await CartModel.create({ products: [] })
+
         const create = await UserModel.create({
             username,
             email,
             password: Hash,
+            cart: cart._id,
             avatar: file
                 ? proccess_type == 'DEV'
                     ? `${req.protocol}://${req.hostname}:${PORT}/upload/avatar/${file.filename}`
@@ -69,6 +73,7 @@ const login = async (req, res) => {
 
         const tokenizeUser = {
             id: findUser._id,
+            cart_id: findUser.cart,
             auth_type: findUser.role,
         }
 

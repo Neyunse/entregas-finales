@@ -1,12 +1,7 @@
-import pr from './schemas/products'
-import uniqid from "uniqid";
+import pr from '../schemas/products'
+import uniqid from 'uniqid'
 
 export default class Products {
-    constructor(route) {
-        this.route = route
-    }
-    // Local Functios
-
     async __find(obj) {
         return pr.find(obj)
     }

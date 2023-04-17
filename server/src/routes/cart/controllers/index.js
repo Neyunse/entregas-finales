@@ -1,6 +1,6 @@
 import { Cart } from '../../../dao'
 import { products } from '../../products/controllers'
-const carts = Cart('../../../local/cart.json')
+const carts = Cart()
 
 export async function deleteCart(req, res) {
     const { id } = req.params
@@ -21,16 +21,16 @@ export async function deleteCart(req, res) {
 }
 
 export async function deleteProductInCart(req, res) {
-    const { id, id_prod } = req.params
-
+    const { id_prod } = req.params
+    const user = req.tokenizedUser
     try {
-        const cart = await carts.getById(id)
+        const cart = await carts.getById(user.cart_id)
         const newCartProducts = cart.products.filter((product) => {
             return product._id != id_prod
         })
 
         cart.products = newCartProducts
-        const updatedCartId = await carts.updateProducts(id, cart)
+        const updatedCartId = await carts.updateProducts(user.cart_id, cart)
         res.json({
             status: 'ok',
             updatedCart: updatedCartId,
@@ -45,73 +45,45 @@ export async function deleteProductInCart(req, res) {
 }
 
 export async function getProductsInCart(req, res) {
-    const { id } = req.params
-
+    const user = req.tokenizedUser
     try {
-        const cart = await carts.getById(id)
-
-        if (cart) return res.send({ cart })
-
-        return res.status(404).send({
-            status: 'error',
-            message: "You don't have any products to purchase.",
+        const cart = await carts.getById(user.cart_id, {
+            populate: true,
+            collection: 'products._id',
         })
+        const products = cart.products.map((p) => p._id)
+        return res.send({ products })
     } catch (error) {
         return res.status(500).send({
             status: 'error',
             message: error.message,
         })
-    }
-}
-
-export const makeCartAndPostProduct = async (req, res) => {
-    const { id_prod } = req.params
-
-    try {
-        const product = await products.getById(id_prod)
-        const newCart = {
-            timestamp: Date.now(),
-            products: [product],
-            uid: req.tokenizedUser.id,
-        }
-
-        await carts.save(newCart).then((r) => {
-            console.log(r)
-            return res.send({ status: 'ok', cartId: r._id })
-        })
-
-    
-    } catch (error) {
-        return res.status(500).send({ error: { message: error.message } })
     }
 }
 
 export async function postProductInCart(req, res) {
-    const { id_prod, id } = req.params
-
+    const { id_prod } = req.params
+    const user = req.tokenizedUser
     try {
-        const cart = await carts.getById(id)
-        const product = await products.getById(id_prod)
-
-        if (cart) {
-            const product_arr = [...cart.products, product]
-
-            const updatedCartId = await carts.updateProducts(id, product_arr)
-            return res.send({
-                status: 'ok',
-                updatedCart: updatedCartId,
-                productAdded: product,
+        const cart = await carts.getById(user.cart_id)
+        const exist = cart.products.find((game) => game.id === id_prod)
+        if (exist) {
+            return res.status(400).send({
+                error: {
+                    message: 'This game already exists in the cart.',
+                },
             })
         }
 
-        return res
-            .status(404)
-            .json({ error: { message: 'Your cart was not found' } })
-    } catch (error) {
-        return res.status(500).send({
-            status: 'error',
-            message: error.message,
+        cart.products.push({ _id: id_prod })
+
+        await carts.updateProducts(cart._id, { products: cart.products })
+
+        res.send({
+            status: 'ok',
         })
+    } catch (error) {
+        res.status(500).send(error.message)
     }
 }
 

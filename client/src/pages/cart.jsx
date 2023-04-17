@@ -2,7 +2,7 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import Product from "@/components/product"
 const Cart = () => {
-      const [Cart, setCartData] = useState()
+      const [Cart, setCartData] = useState([])
       const GetCartData = async (id) => {
             await axios(`http://localhost:8080/api/cart/my/${id}`, {
                   headers: {
@@ -10,21 +10,21 @@ const Cart = () => {
                         "Authorization": " Bearer " + JSON.parse(localStorage.getItem("user")).access_token
                   }
             }).then(r => r.data).then(data => {
-                  setCartData(data)
-
+                  setCartData(data.products)
+                  console.log(data);
             })
       }
 
       useEffect(() => {
-            if (localStorage.getItem("cartId") != undefined) {
-                  GetCartData(localStorage.getItem("cartId"))
+            if (localStorage.getItem("user") != undefined) {
+                  GetCartData(JSON.parse(localStorage.getItem("user")).user.cart_id)
             }
       }, [])
 
       const removeCallback = async (id) => {
 
-            if (localStorage.getItem("cartId") != undefined) {
-                  await axios(`http://localhost:8080/api/cart/del/${localStorage.getItem("cartId")}/products/${id}`, {
+            if (localStorage.getItem("user") != undefined) {
+                  await axios(`http://localhost:8080/api/cart/del/products/${id}`, {
                         method: "DELETE",
                         headers: {
                               "Content-Type": "application/json",
@@ -32,20 +32,47 @@ const Cart = () => {
                         }
                   }).then(r => r.data).then(data => {
                         console.log(data);
-                        if (localStorage.getItem("cartId") != undefined) {
-                              GetCartData(localStorage.getItem("cartId"))
+                        if (localStorage.getItem("user") != undefined) {
+                              GetCartData(JSON.parse(localStorage.getItem("user")).user.cart_id)
                         }
                   })
             }
       }
 
-      if (!Cart) return <>Nothing here</>
+      const checkout = async () => {
+
+            const options = {
+                  method: "POST",
+                  url: `http://localhost:8080/api/checkout`,
+                  headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
+                  }
+            };
+
+            await axios(options).then((r) => r.data).then((data) => {
+                  console.log("Checkout OK!");
+            }).catch((err) => {
+                  if (err) {
+                        console.error(err)
+                  }
+            })
+      }
+
       return (
-            <>
-                  <ul className="kg__flex gap-20 productList">
-                        {Cart.cart.products.map((p, i) => <Product key={i} item={p} removeCallback={removeCallback} isOnCart={true} />)}
-                  </ul>
-            </>
+            <div className="kg__flex gap-10">
+                  <div>
+                        {Cart.length ? (
+                              <ul className="kg__flex gap-20 productList">
+                                    {Cart.map((p, i) => <Product key={i} item={p} removeCallback={removeCallback} isOnCart={true} />)}
+                              </ul>
+                        ) : <>Nothing here</>}
+                  </div>
+                  <div>
+                        {Cart.length && <div role="button" onClick={checkout} className="kg__button w-100 kg-no__decoration">Procesar compra</div>
+                        }
+                  </div>
+            </div>
       )
 }
 
