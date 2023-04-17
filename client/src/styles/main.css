@@ -57,3 +57,12 @@
       opacity: 0.5;
       cursor: pointer;
 }
+
+.av-home{
+      width: 50px;
+      border-radius: 50px;
+}
+
+.nav_li{
+      align-items: center;
+}

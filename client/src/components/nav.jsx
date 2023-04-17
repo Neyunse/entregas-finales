@@ -43,10 +43,10 @@ const Nav = () => {
                                                 <a className="nav-link" href="/cart">My Cart</a>
                                           </li>
                                     </ul>
-                                    <ul className="navbar-nav  mb-2 mb-lg-0">
+                                    <ul className="navbar-nav nav_li mb-2 mb-lg-0">
                                           <li className="nav-item">
                                                 <a className="nav-link" aria-current="page" href="#">
-                                                      {user && user.avatar ? <img src={user && user.avatar} alt={user && user.username} /> : user && user.username}
+                                                      {user && user.avatar ? <img className="av-home" src={user && user.avatar} alt={user && user.username} /> : user && user.username}
                                                 </a>
                                           </li>
                                           <li className="nav-item">
