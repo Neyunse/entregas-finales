@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 const Nav = () => {
       const [user, setUser] = useState()
       const getMe = async () => {
-            await axios(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/user/me`, {
+            await axios(`https://crimson-water-4670.fly.dev/api/auth/user/me`, {
                   headers: {
                         "Content-Type": "application/json",
                         "Authorization": " Bearer " + JSON.parse(localStorage.getItem("user")).access_token

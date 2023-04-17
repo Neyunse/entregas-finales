@@ -32,7 +32,7 @@ export default function ProductList() {
 
     const options = {
       method: "POST",
-      url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cart/add/products/${id}`,
+      url: `https://crimson-water-4670.fly.dev/api/cart/add/products/${id}`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token

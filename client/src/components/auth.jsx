@@ -32,7 +32,7 @@ const Login = ({ userData, setPage }) => {
                         "Content-Type": "application/json"
                   }
             }
-            await axios(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`, op).then((r) => r.data).then((data) => {
+            await axios(`https://crimson-water-4670.fly.dev/api/auth/login`, op).then((r) => r.data).then((data) => {
                   localStorage.setItem("user", JSON.stringify(data))
                   userData(data)
             })
@@ -84,7 +84,7 @@ const Register = ({ setPage }) => {
                         "Content-Type": "multipart/form-data"
                   }
             }
-            await axios(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/register`, op)
+            await axios(`https://crimson-water-4670.fly.dev/api/auth/register`, op)
       }
 
 
