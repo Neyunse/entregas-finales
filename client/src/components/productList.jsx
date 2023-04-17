@@ -32,7 +32,7 @@ export default function ProductList() {
 
     const options = {
       method: "POST",
-      url: `http://localhost:8080/api/cart/add/products/${id}`,
+      url: `${process.env.API_URL}/api/cart/add/products/${id}`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token

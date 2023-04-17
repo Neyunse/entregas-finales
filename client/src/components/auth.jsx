@@ -32,7 +32,7 @@ const Login = ({ userData, setPage }) => {
                         "Content-Type": "application/json"
                   }
             }
-            await axios("http://localhost:8080/api/auth/login", op).then((r) => r.data).then((data) => {
+            await axios(`${process.env.API_URL}/api/auth/login`, op).then((r) => r.data).then((data) => {
                   localStorage.setItem("user", JSON.stringify(data))
                   userData(data)
             })
@@ -84,7 +84,7 @@ const Register = ({ setPage }) => {
                         "Content-Type": "multipart/form-data"
                   }
             }
-            await axios("http://localhost:8080/api/auth/register", op)
+            await axios(`${process.env.API_URL}/api/auth/register`, op)
       }
 
 

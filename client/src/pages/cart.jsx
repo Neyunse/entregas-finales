@@ -4,7 +4,7 @@ import Product from "@/components/product"
 const Cart = () => {
       const [Cart, setCartData] = useState([])
       const GetCartData = async (id) => {
-            await axios(`http://localhost:8080/api/cart/my/${id}`, {
+            await axios(`${process.env.API_URL}/api/cart/my/${id}`, {
                   headers: {
                         "Content-Type": "application/json",
                         "Authorization": " Bearer " + JSON.parse(localStorage.getItem("user")).access_token
@@ -24,7 +24,7 @@ const Cart = () => {
       const removeCallback = async (id) => {
 
             if (localStorage.getItem("user") != undefined) {
-                  await axios(`http://localhost:8080/api/cart/del/products/${id}`, {
+                  await axios(`${process.env.API_URL}/api/cart/del/products/${id}`, {
                         method: "DELETE",
                         headers: {
                               "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const Cart = () => {
 
             const options = {
                   method: "POST",
-                  url: `http://localhost:8080/api/checkout`,
+                  url: `${process.env.API_URL}/api/checkout`,
                   headers: {
                         "Content-Type": "application/json",
                         "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
