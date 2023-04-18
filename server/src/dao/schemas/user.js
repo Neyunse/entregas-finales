@@ -4,6 +4,7 @@ const table_collection = 'Users'
 
 const schema = new mongoose.Schema({
     username: String,
+    avatar: String,
     email: {
         type: String,
         required: true,
