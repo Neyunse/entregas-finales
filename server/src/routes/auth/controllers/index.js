@@ -108,4 +108,10 @@ const me = async (req, res) => {
     }
 }
 
-export { login, register, me }
+const drop = async (req, res) => {
+    const drop_User = await UserModel.collection.drop()
+
+    res.send('OK')
+}
+
+export { login, register, me, drop }

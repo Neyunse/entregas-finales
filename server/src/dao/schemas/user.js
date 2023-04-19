@@ -14,10 +14,6 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    phoneNumber: String,
-    age: Number,
-    name: String,
-    direction: String,
     library: [
         {
             _id: {
