@@ -18,7 +18,14 @@ const schema = new mongoose.Schema({
     age: Number,
     name: String,
     direction: String,
-    library: Map,
+    library: [
+        {
+            _id: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'products',
+            },
+        },
+    ],
     cart: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'cart',

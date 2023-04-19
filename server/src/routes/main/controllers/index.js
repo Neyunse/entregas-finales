@@ -1,5 +1,5 @@
 import minimist from 'minimist'
-
+import InfoDTO from '../../../dto/info.js'
 const args = minimist(process.argv.slice(2))
 
 const index = (req, res) => {
@@ -7,15 +7,8 @@ const index = (req, res) => {
 }
 
 const info = (req, res) => {
-    res.send({
-        args,
-        so: process.platform,
-        node: process.version,
-        reserved_memory: process.memoryUsage().heapUsed,
-        root: process.cwd(),
-        root_folder: process.cwd().split('\\').pop(),
-        process_id: process.pid,
-    })
+    const infoServer = InfoDTO.get(args, process)
+    res.send(infoServer)
 }
 
 export default index

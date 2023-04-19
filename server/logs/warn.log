@@ -31,3 +31,5 @@
 {"expiredAt":"2023-04-02T02:52:57.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError"}
 {"expiredAt":"2023-04-11T15:39:58.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError"}
 {"expiredAt":"2023-04-14T14:55:43.000Z","level":"error","message":"jwt expired","name":"TokenExpiredError"}
+{"level":"error","message":"invalid signature","name":"JsonWebTokenError"}
+{"level":"error","message":"invalid signature","name":"JsonWebTokenError"}

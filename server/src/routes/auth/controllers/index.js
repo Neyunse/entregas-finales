@@ -6,7 +6,7 @@ import transporter, { email_app } from '../../../config/mail'
 import { logger } from '../../../config/log'
 import CartModel from '../../../dao/schemas/cart'
 const proccess_type = process.env.NODE_TYPE
-
+import UserDTO from '../../../dto/user.js'
 const register = async (req, res) => {
     try {
         const file = req.file
@@ -71,14 +71,10 @@ const login = async (req, res) => {
 
         if (!isValidPassword) return new Error('invalid password')
 
-        const tokenizeUser = {
-            id: findUser._id,
-            cart_id: findUser.cart,
-            auth_type: findUser.role,
-        }
+        const tokenizeUser = UserDTO.jwt(findUser)
 
         const token = jwt.sign(tokenizeUser, server_secret, {
-            expiresIn: '1d',
+            expiresIn: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
         })
 
         return res.send({
@@ -102,12 +98,9 @@ const me = async (req, res) => {
                 message: 'This user not exists.',
             })
 
-        return res.send({
-            username: findUser.username,
-            email: findUser.email,
-            role: findUser.role,
-            avatar: findUser.avatar,
-        })
+        const payload = UserDTO.get(findUser)
+
+        return res.send({ ...payload })
     } catch (error) {
         return res.status(500).send({
             message: error.message,

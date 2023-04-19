@@ -1,6 +1,6 @@
-import { Products, DAO_ENV } from '../../../dao'
-const products = Products('../../../local/products.json')
-
+import { Products } from '../../../dao'
+const products = Products()
+import ProductsDTO from '../../../dto/products.js'
 const deleteProducts = async (req, res) => {
     if (req.tokenizedUser.auth_type !== 'admin') {
         return res.status(401).json({
@@ -37,10 +37,10 @@ const getProducts = async (req, res) => {
 }
 
 const postProducts = async (req, res) => {
-    const { name, description, image, price, stock } = req.body
+    const { name, description, image, price } = req.body
 
     try {
-        if (!name || !description || !image || !price || !stock) {
+        if (!name || !description || !image || !price) {
             return res
                 .status(400)
                 .send({ error: { message: 'some fields are required' } })
@@ -54,13 +54,8 @@ const postProducts = async (req, res) => {
             })
         }
 
-        const newProduct = {
-            name,
-            description,
-            image,
-            price,
-            stock,
-        }
+        const newProduct = ProductsDTO.get(req.body)
+
         const idNew = await products.save(newProduct)
         res.status(201).json({
             status: 201,
@@ -75,7 +70,7 @@ const postProducts = async (req, res) => {
 }
 
 const putProducts = async (req, res) => {
-    const { name, description, image, price, stock } = req.body
+    const { name, description, image, price } = req.body
     try {
         if (req.tokenizedUser.auth_type !== 'admin') {
             return res.status(401).json({
@@ -87,7 +82,7 @@ const putProducts = async (req, res) => {
 
         const { id } = req.params
 
-        if (!name || !description || !image || !price || !stock) {
+        if (!name || !description || !image || !price) {
             return res
                 .status(400)
                 .send({ error: { message: 'some fields are required' } })
@@ -98,40 +93,11 @@ const putProducts = async (req, res) => {
                 .send({ error: { message: 'Id parameter is missing' } })
         }
 
-        let updatedProduct
+        const updatedProduct = ProductsDTO.get(req.body)
 
-        if (DAO_ENV == 'fs') {
-            updatedProduct = {
-                name,
-                description,
-                image,
-                price,
-                stock,
-            }
+        const product = await products.update(id, updatedProduct)
 
-            const id = await products.update(updatedProduct)
-
-            return res
-                .status(200)
-                .json({
-                    status: 200,
-                    updatedProduct: [await products.getById(id)],
-                })
-        } else {
-            updatedProduct = {
-                name,
-                description,
-                image,
-                price,
-                stock,
-            }
-
-            const product = await products.update(id, updatedProduct)
-
-            return res
-                .status(200)
-                .json({ status: 200, updatedProduct: product })
-        }
+        return res.status(200).json({ status: 200, updatedProduct: product })
     } catch (error) {
         return res.status(500).send({
             status: 'error',

@@ -4,6 +4,7 @@ import transporter from '../../../config/mail'
 import { email_app } from '../../../config/mail'
 const carts = Cart()
 
+
 const processPayment = async (req, res) => {
     try {
         const cart = await carts.getById(req.tokenizedUser.cart_id, {
@@ -30,10 +31,10 @@ const processPayment = async (req, res) => {
             html: html_pro,
         })
 
-        
         return res.send({
             status: 'success',
             message: 'Your payment has been successfully!',
+            CartProducts
         })
     } catch (error) {
         return res.status(500).send({
