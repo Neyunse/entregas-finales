@@ -14,7 +14,6 @@ const schema = new mongoose.Schema({
       description: String,
       image: String,
       price: Number,
-      stock: Number,
       code: String
 })
 
