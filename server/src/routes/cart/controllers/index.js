@@ -66,8 +66,8 @@ export async function postProductInCart(req, res) {
     const user = req.tokenizedUser
     try {
         const cart = await carts.getById(user.cart_id)
-        const exist = cart.products.find((game) => game.id === id_prod)
-        if (exist) {
+        const existInCart = cart.products.find((game) => game.id === id_prod)
+        if (existInCart) {
             return res.status(400).send({
                 error: {
                     message: 'This game already exists in the cart.',

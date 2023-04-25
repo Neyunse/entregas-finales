@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import index,{info} from './controllers'
+import { info } from './controllers'
+
 const Main = Router()
 
-Main.get('/', index)
 Main.get('/info', info)
 
 
