@@ -4,7 +4,8 @@
         "semi": "off",
         "quotes": "off",
         "no-unused-vars": "warn",
-        "no-undef": "off"
+        "no-undef": "off",
+        "no-case-declarations": "off"
     },
     "parserOptions": {
         "ecmaVersion": "latest",

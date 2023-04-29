@@ -1,0 +1,40 @@
+{
+  "name": "proyecto-final",
+  "version": "0.0.0",
+  "main": "src/server.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --experimental-specifier-resolution=node .",
+    "start": "node --experimental-specifier-resolution=node .",
+    "lint": "eslint .",
+    "standar": "standard-version",
+    "test:user": "mocha --timeout 10000 ./src/testing/user.test.js",
+    "test:app": "mocha --timeout 10000 ./src/testing/app.test.js",
+    "token:admin": "node --experimental-specifier-resolution=node jwtAdmin.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "5.1.0",
+    "chai": "4.3.7",
+    "connect-mongo": "5.0.0",
+    "cors": "2.8.5",
+    "dotenv": "16.0.3",
+    "express": "4.18.2",
+    "express-session": "1.17.3",
+    "jsonwebtoken": "9.0.0",
+    "minimist": "^1.2.8",
+    "mocha": "10.2.0",
+    "mongoose": "7.0.3",
+    "multer": "1.4.5-lts.1",
+    "nodemailer": "6.9.1",
+    "supertest": "6.3.3",
+    "uniqid": "5.4.0"
+  },
+  "devDependencies": {
+    "eslint": "8.36.0",
+    "eslint-config-prettier": "8.8.0",
+    "nodemon": "2.0.22",
+    "standard-version": "9.5.0",
+    "winston": "3.8.2"
+  }
+}
