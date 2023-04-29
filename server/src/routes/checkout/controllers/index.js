@@ -21,30 +21,27 @@ const processPayment = async (req, res) => {
             })
             .join('<br>')
         
-        const productsIDs = cart.products.map((p) => p._id._id)
 
-        
-        await UserModel.findAndUpdate(
+        await UserModel.findByIdAndUpdate(
               { _id: req.tokenizedUser.id },
-              {
-                    products: [productsIDs],
-              }
+              { library: cart.products }
         )
 
         const html_pro = `<h1>Nuevo Pedido</h1>
             ${buyedProducts}`
 
         await transporter.sendMail({
-            from: `E-commerce App <${email_app}>`,
-            to: user.email,
-            subject: 'Your order has been received and is being processed.',
-            html: html_pro,
+              from: `E-commerce App <${email_app}>`,
+              to: user.email,
+              subject: 'Your order has been received and is being processed.',
+              html: html_pro,
         })
 
+        await carts.clearCart(req.tokenizedUser.cart_id)
+
         return res.send({
-            status: 'success',
-            message: 'Your payment has been successfully!',
-            CartProducts
+              status: 'success',
+              message: 'Your payment has been successfully!',
         })
     } catch (error) {
         return res.status(500).send({
