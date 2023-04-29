@@ -1,6 +1,8 @@
 import axios from "axios"
 import { useState, useEffect } from "react"
 import Product from "@/components/product"
+import { Toaster, toast } from 'sonner'
+
 const Cart = () => {
       const [Cart, setCartData] = useState([])
       const GetCartData = async (id) => {
@@ -24,18 +26,27 @@ const Cart = () => {
       const removeCallback = async (id) => {
 
             if (localStorage.getItem("user") != undefined) {
-                  await axios(`https://crimson-water-4670.fly.dev/api/cart/del/products/${id}`, {
+                  const prom = axios(`https://crimson-water-4670.fly.dev/api/cart/del/products/${id}`, {
                         method: "DELETE",
                         headers: {
                               "Content-Type": "application/json",
                               "Authorization": " Bearer " + JSON.parse(localStorage.getItem("user")).access_token
                         }
-                  }).then(r => r.data).then(data => {
-                        console.log(data);
-                        if (localStorage.getItem("user") != undefined) {
-                              GetCartData(JSON.parse(localStorage.getItem("user")).user.cart_id)
-                        }
                   })
+
+                  // toasr
+                  toast.promise(prom, {
+                        loading: 'Loading...',
+                        success: () => {
+                              if (localStorage.getItem("user") != undefined) {
+                                    GetCartData(JSON.parse(localStorage.getItem("user")).user.cart_id)
+                              }
+                              return "Product removed."
+                        },
+                        error: (data) => {
+                              return "I can't remove this product."
+                        },
+                  });
             }
       }
 
@@ -50,16 +61,24 @@ const Cart = () => {
                   }
             };
 
-            await axios(options).then((r) => r.data).then((data) => {
-                  console.log("Checkout OK!");
-            }).catch((err) => {
-                  if (err) {
-                        console.error(err)
-                  }
-            })
+            const prom = axios(options)
+
+            toast.promise(prom, {
+                  loading: 'Loading...',
+                  success: () => {
+                        if (localStorage.getItem("user") != undefined) {
+                              GetCartData(JSON.parse(localStorage.getItem("user")).user.cart_id)
+                        }
+                        return "Checkout OK!"
+                  },
+                  error: (data) => {
+                        return "I can't process your checkout."
+                  },
+            });
       }
 
       return (
+            <>
             <div className="kg__flex gap-10">
                   <div>
                         {Cart.length ? (
@@ -72,7 +91,9 @@ const Cart = () => {
                         {Cart.length && <div role="button" onClick={checkout} className="kg__button w-100 kg-no__decoration">Procesar compra</div>
                         }
                   </div>
-            </div>
+                  </div>
+                  <Toaster />
+            </>
       )
 }
 

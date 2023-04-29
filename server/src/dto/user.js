@@ -20,11 +20,12 @@ export default class UserDTO {
     properties of the returned object are extracted from the `user` object passed as a parameter. */
     static get = (user) => {
         return {
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            role: user.role,
-            avatar: user.avatar,
+              id: user._id,
+              username: user.username,
+              email: user.email,
+              role: user.role,
+              avatar: user.avatar,
+              library: user.library,
         }
     }
 }

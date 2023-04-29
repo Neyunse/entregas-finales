@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Product from "./product";
+import { Toaster, toast } from 'sonner'
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [cartId, setSetCardiD] = useState("");
@@ -28,47 +29,30 @@ export default function ProductList() {
   }, []);
 
   const ProductCallback = async (callback) => {
-    const { id } = callback;
+    const { id, setIsTaked } = callback;
 
     const options = {
-      method: "POST",
-      url: `https://crimson-water-4670.fly.dev/api/cart/add/products/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
-      }
-    };
-    await axios(options).then((r) => r.data).then((data) => {
-      console.log("added product");
-      
-    }).catch((err) => {
-      if (err) {
-        console.error(`[ERROR] ${err.message}: ` + err.response.data.error.message)
-      }
-    })
-
-  }
-
-
-  const checkout = async () => {
-
-    const options = {
-      method: "POST",
-      url: `https://crimson-water-4670.fly.dev/api/checkout/${cartId}`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token
       }
     };
 
-    await axios(options).then((r) => r.data).then((data) => {
-      setSetCardiD("")
-      localStorage.removeItem("cartId")
-    }).catch((err) => {
-      if (err) {
-        console.error(`[ERROR] ${err.message}: ` + err.response.data.error.message)
-      }
+    const prom = axios.post(`https://crimson-water-4670.fly.dev/api/cart/add/products/${id}`, {}, {
+      headers: options.headers
     })
+
+    // toasr
+    toast.promise(prom, {
+      loading: 'Loading...',
+      success: () => {
+        setIsTaked(true)
+        return "Products added."
+      },
+      error: (data) => {
+        return data.response.data.error.message
+      },
+    });
   }
 
   return (
@@ -76,6 +60,7 @@ export default function ProductList() {
       <ul className="kg__flex gap-20 productList">
         {products.map((p, i) => <Product key={i} item={p} cartId={cartId} callbackButton={ProductCallback} />)}
       </ul>
+      <Toaster />
     </>
   );
 }
