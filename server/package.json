@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "standar": "standard-version",
     "test:user": "mocha --timeout 10000 ./src/testing/user.test.js",
-    "test:app": "mocha --timeout 10000 ./src/testing/app.test.js"
+    "test:app": "mocha --timeout 10000 ./src/testing/app.test.js",
+    "token:admin": "node --experimental-specifier-resolution=node jwtAdmin.js"
   },
   "type": "module",
   "dependencies": {

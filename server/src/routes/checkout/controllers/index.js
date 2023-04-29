@@ -20,6 +20,16 @@ const processPayment = async (req, res) => {
                 return `${p._id.name} - ${p._id.price} usd`
             })
             .join('<br>')
+        
+        const productsIDs = cart.products.map((p) => p._id._id)
+
+        
+        await UserModel.findAndUpdate(
+              { _id: req.tokenizedUser.id },
+              {
+                    products: [productsIDs],
+              }
+        )
 
         const html_pro = `<h1>Nuevo Pedido</h1>
             ${buyedProducts}`
