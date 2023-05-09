@@ -1,3 +1,6 @@
+[dev] branch most recent changes
+[master] Stable
+
 URL: https://entregas-finales.vercel.app
 
 BACKEND: https://crimson-water-4670.fly.dev
@@ -21,3 +24,4 @@ for [POST, PUT] products you need use bearer admin token on Insomnia or Postman:
 or generate your own token using
 
 `yarn token:admin`
+
