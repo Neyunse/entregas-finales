@@ -24,7 +24,7 @@ const processPayment = async (req, res) => {
 
         await UserModel.findByIdAndUpdate(
               { _id: req.tokenizedUser.id },
-              { library: cart.products }
+              { library: [...user.library, ...cart.products] }
         )
 
         const html_pro = `<h1>Nuevo Pedido</h1>

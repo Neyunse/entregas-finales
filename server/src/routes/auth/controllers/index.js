@@ -122,7 +122,7 @@ const me = async (req, res) => {
             }
             const findUser = await UserModel.findOne({
                   _id: req.tokenizedUser.id,
-            }).populate(options.collection)
+            })
             if (!findUser)
                   return res.status(404).send({
                         message: 'This user not exists.',
