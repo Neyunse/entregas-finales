@@ -86,7 +86,7 @@ const Register = ({ setPage }) => {
                         "Content-Type": "multipart/form-data"
                   }
             }
-            const prom = await axios(`https://crimson-water-4670.fly.dev/api/auth/register`, op)
+            const prom = axios(`https://crimson-water-4670.fly.dev/api/auth/register`, op)
 
             toast.promise(prom, {
                   loading: 'Loading...',
