@@ -16,7 +16,7 @@ kill_timeout = "5s"
   PRIMARY_REGION = "gru"
 
 [[mounts]]
-  source = "uploads_machines"
+  source = "uploads"
   destination = "src/upload"
   processes = ["app"]
 
