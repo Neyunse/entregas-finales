@@ -66,3 +66,12 @@
 .nav_li{
       align-items: center;
 }
+
+.cart-container__products{
+      width: calc(100% - 40px);
+      padding: 9px;
+}
+.cart-container__buttons{
+      width: calc(100% - 1585px);
+      padding: 9px;
+}
