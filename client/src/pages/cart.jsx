@@ -79,18 +79,22 @@ const Cart = () => {
 
       return (
             <>
-            <div className="kg__flex gap-10">
-                  <div className="kg__container cart-container__products">
+                  <div className="kg__flex gap-10">
                         {Cart.length ? (
-                              <ul className="kg__flex gap-20 productList">
-                                    {Cart.map((p, i) => <Product key={i} item={p} removeCallback={removeCallback} isOnCart={true} />)}
-                              </ul>
-                        ) : <>Nothing here</>}
-                  </div>
-                  <div className="cart-container__buttons">
-                        {Cart.length && <div role="button" onClick={checkout} className="kg__button w-100 kg-no__decoration">Purchase</div>
-                        }
-                  </div>
+                              <>
+                                    <div className="kg__container cart-container__products">
+
+                                          <ul className="kg__flex gap-20 productList">
+                                                {Cart.map((p, i) => <Product key={i} item={p} removeCallback={removeCallback} isOnCart={true} />)}
+                                          </ul>
+                                    </div>
+                                    
+                                    <div className="cart-container__buttons">
+                                          <div role="button" onClick={checkout} className="kg__button w-100 kg-no__decoration">Purchase</div>
+                                    </div>
+
+                              </>
+                        ) : "Nothing here"}
                   </div>
                   <Toaster />
             </>
