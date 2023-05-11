@@ -88,7 +88,7 @@ const Cart = () => {
                         ) : <>Nothing here</>}
                   </div>
                   <div>
-                        {Cart.length && <div role="button" onClick={checkout} className="kg__button w-100 kg-no__decoration">Procesar compra</div>
+                        {Cart.length && <div role="button" onClick={checkout} className="kg__button w-100 kg-no__decoration">Purchase</div>
                         }
                   </div>
                   </div>
